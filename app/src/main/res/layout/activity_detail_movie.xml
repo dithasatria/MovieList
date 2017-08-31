@@ -46,16 +46,17 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgPoster"
+                        android:id="@+id/imgDiscoverMovie"
                         android:layout_alignParentBottom="true"
                         android:src="@mipmap/ic_launcher"
                         android:layout_width="120dp"
+                        android:transitionName="@string/activity_image_trans"
                         android:layout_height="140dp" />
 
                     <TextView
                         android:id="@+id/tvGenreDetail"
                         android:layout_alignParentBottom="true"
-                        android:layout_toRightOf="@id/imgPoster"
+                        android:layout_toRightOf="@id/imgDiscoverMovie"
                         android:text="Genre"
                         android:textColor="#FFF"
                         android:layout_width="match_parent"
@@ -64,7 +65,7 @@
                     <TextView
                         android:id="@+id/tvTitle"
                         android:text="JUDUL"
-                        android:layout_toRightOf="@id/imgPoster"
+                        android:layout_toRightOf="@id/imgDiscoverMovie"
                         android:layout_above="@id/tvGenreDetail"
                         android:textColor="#FFF"
                         android:textSize="16sp"

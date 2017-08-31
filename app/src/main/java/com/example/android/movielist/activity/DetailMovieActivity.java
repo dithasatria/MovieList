@@ -14,13 +14,16 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.movielist.R;
+import com.example.android.movielist.fragment.CastFragment;
 import com.example.android.movielist.fragment.OverviewFragment;
+import com.example.android.movielist.fragment.ReviewFragment;
+import com.example.android.movielist.fragment.TrailerFragment;
 import com.example.android.movielist.model.ResultsItem;
 import com.example.android.movielist.util.Utility;
 
@@ -31,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by DITHA on 24/08/2017.
  */
 
-public class ParalaxActivity extends AppCompatActivity {
+public class DetailMovieActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -39,10 +42,12 @@ public class ParalaxActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton FAB;
     @BindView(R.id.nestedScrollView) NestedScrollView NESTED_SCROLL;
     @BindView(R.id.imgBackdrop) ImageView IMG_BACKDROP;
-    @BindView(R.id.imgPoster) ImageView IMG_POSTER;
+    @BindView(R.id.imgDiscoverMovie) ImageView IMG_POSTER;
     @BindView(R.id.tvTitle) TextView TV_TITLE;
 
     private static final String KEY_EXTRA_MOVIE = "movie";
+    private static final String KEY_LANGUAGE = "en-US";
+    private long movie_id;
 
     private ResultsItem item;
 
@@ -63,9 +68,12 @@ public class ParalaxActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         item = getIntent().getParcelableExtra("dataMovie");
-        String title = item.getTitle();
+        if(item == null){
+            finish();
+        }
+        movie_id = item.getId();
 
-        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, String.valueOf(movie_id), Toast.LENGTH_SHORT).show();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager2);
         viewPager.setAdapter(new sliderAdapter(getSupportFragmentManager()));
@@ -87,8 +95,22 @@ public class ParalaxActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            OverviewFragment view2 = new OverviewFragment();
-            return view2;
+            switch (position){
+                case 0:
+                    OverviewFragment tab0 = new OverviewFragment();
+                    return tab0;
+                case 1:
+                    TrailerFragment tab1 = new TrailerFragment();
+                    return tab1;
+                case 2:
+                    CastFragment tab2 = new CastFragment();
+                    return tab2;
+                case 3:
+                    ReviewFragment tab3 = new ReviewFragment();
+                    return tab3;
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -106,9 +128,7 @@ public class ParalaxActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(Utility.URL_IMAGE + item.getPosterPath()).into(IMG_POSTER);
 
         TV_TITLE.setText(item.getTitle());
-        Utility.overView = item.getOverview();
-
-        Toast.makeText(this, item.getGenreIds().get(1).toString(), Toast.LENGTH_SHORT).show();
+        Utility.OVERVIEW = item.getOverview();
     }
 
     private void collapsingToolbar(){
@@ -126,7 +146,7 @@ public class ParalaxActivity extends AppCompatActivity {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle("Title");
+                    collapsingToolbarLayout.setTitle(item.getTitle());
                     isShow = true;
                 } else if(isShow) {
                     collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
@@ -134,6 +154,16 @@ public class ParalaxActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

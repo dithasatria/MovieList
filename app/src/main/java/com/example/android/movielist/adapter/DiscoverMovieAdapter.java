@@ -18,7 +18,6 @@ import java.util.List;
 public class DiscoverMovieAdapter extends RecyclerView.Adapter<MovieListViewHolder> {
 
     private List<ResultsItem> resultsItems;
-    private MovieClickListener movieClickListener;
 
     public DiscoverMovieAdapter(List<ResultsItem> resultsItems) {
         this.resultsItems = resultsItems;

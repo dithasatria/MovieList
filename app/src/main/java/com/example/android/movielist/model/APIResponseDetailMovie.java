@@ -312,4 +312,7 @@ public class APIResponseDetailMovie{
 			",status = '" + status + '\'' + 
 			"}";
 		}
+
+	public APIResponseDetailMovie() {
+	}
 }

@@ -7,4 +7,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padding_left_movie_list">5sp</dimen>
     <dimen name="padding_right_movie_list">5sp</dimen>
+    <dimen name="view_height">1sp</dimen>
 </resources>

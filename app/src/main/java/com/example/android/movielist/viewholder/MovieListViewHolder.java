@@ -1,6 +1,9 @@
 package com.example.android.movielist.viewholder;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.movielist.R;
-import com.example.android.movielist.activity.ParalaxActivity;
+import com.example.android.movielist.activity.DetailMovieActivity;
 import com.example.android.movielist.model.ResultsItem;
 import com.example.android.movielist.util.Utility;
 
@@ -39,9 +42,19 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(itemView.getContext(), ParalaxActivity.class);
+                Intent in = new Intent(itemView.getContext(), DetailMovieActivity.class);
                 in.putExtra("dataMovie", item);
-                itemView.getContext().startActivity(in);
+                Utility.idMovie = item.getId();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) itemView.getContext(), IMG_DISCOVER_MOVIE, itemView.getContext().getString(R.string.activity_image_trans));
+                    itemView.getContext().startActivity(in, options.toBundle());
+                }
+                else{
+                    itemView.getContext().startActivity(in);
+                }
+
             }
         });
     }

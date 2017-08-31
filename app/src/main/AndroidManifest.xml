@@ -21,17 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.DiscoverActivity" />
         <activity
-            android:name=".activity.DiscoverActivity"
-            android:parentActivityName=".activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activity.ParalaxActivity"
+            android:name=".activity.DetailMovieActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.PhotoActivity"></activity>
     </application>
 
 </manifest>

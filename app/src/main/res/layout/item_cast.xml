@@ -4,7 +4,6 @@
     android:layout_width="115dp"
     android:layout_height="238dp"
     app:cardElevation="2dp"
-    android:id="@+id/cardViewMovie"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -12,17 +11,16 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imgDiscoverMovie"
+            android:id="@+id/imgCast"
             android:layout_width="115dp"
             android:layout_height="168dp"
-            android:transitionName="@string/activity_image_trans"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/tvMovieName"
+            android:id="@+id/tvCastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgDiscoverMovie"
+            android:layout_below="@+id/imgCast"
             android:layout_marginLeft="10sp"
             android:text="LOGAN"
             android:textColor="#000"
@@ -30,28 +28,16 @@
             android:maxLines="2"
             android:textSize="14sp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10sp"
             android:layout_marginLeft="10sp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tvStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:maxLines="1"
             android:ellipsize="end"
             android:textSize="10sp"
-            android:text="5 STARS" />
-
-        <ImageView
-            android:src="@drawable/ic_star_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            android:text="CHARACTER" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

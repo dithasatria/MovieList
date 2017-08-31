@@ -54,25 +54,25 @@ public class ResultsItem implements Parcelable{
 	private int voteCount;
 
 	@Override
- 	public String toString(){
-		return 
-			"ResultsItem{" + 
-			"overview = '" + overview + '\'' + 
-			",original_language = '" + originalLanguage + '\'' + 
-			",original_title = '" + originalTitle + '\'' + 
-			",video = '" + video + '\'' + 
-			",title = '" + title + '\'' + 
-			",genre_ids = '" + genreIds + '\'' + 
-			",poster_path = '" + posterPath + '\'' + 
-			",backdrop_path = '" + backdropPath + '\'' + 
-			",release_date = '" + releaseDate + '\'' + 
-			",vote_average = '" + voteAverage + '\'' + 
-			",popularity = '" + popularity + '\'' + 
-			",id = '" + id + '\'' + 
-			",adult = '" + adult + '\'' + 
-			",vote_count = '" + voteCount + '\'' + 
-			"}";
-		}
+	public String toString(){
+		return
+				"ResultsItem{" +
+						"overview = '" + overview + '\'' +
+						",original_language = '" + originalLanguage + '\'' +
+						",original_title = '" + originalTitle + '\'' +
+						",video = '" + video + '\'' +
+						",title = '" + title + '\'' +
+						",genre_ids = '" + genreIds + '\'' +
+						",poster_path = '" + posterPath + '\'' +
+						",backdrop_path = '" + backdropPath + '\'' +
+						",release_date = '" + releaseDate + '\'' +
+						",vote_average = '" + voteAverage + '\'' +
+						",popularity = '" + popularity + '\'' +
+						",id = '" + id + '\'' +
+						",adult = '" + adult + '\'' +
+						",vote_count = '" + voteCount + '\'' +
+						"}";
+	}
 
 	public ResultsItem() {
 	}
