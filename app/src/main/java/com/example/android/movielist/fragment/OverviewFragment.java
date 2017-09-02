@@ -3,10 +3,10 @@ package com.example.android.movielist.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +39,10 @@ public class OverviewFragment extends Fragment {
     @BindView(R.id.tvProductionCompanies) TextView TV_PRODUCTION_COMPANY;
     @BindView(R.id.tvProductionContries) TextView TV_PRODUCTION_COUNTRY;
     @BindView(R.id.tvReleaseDate) TextView TV_RELEASE_DATE;
-    @BindView(R.id.swipeRefreshFragmentOverview) SwipeRefreshLayout SWIPE_REFRESH;
+    @BindView(R.id.ratingBar) RatingBar RATING_BAR;
+    @BindView(R.id.tvVoteAverage) TextView TV_VOTE_AVERAGE;
+    @BindView(R.id.tvVoteCount) TextView TV_VOTE_COUNT;
+    //@BindView(R.id.swipeRefreshFragmentOverview) SwipeRefreshLayout SWIPE_REFRESH;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -57,6 +60,7 @@ public class OverviewFragment extends Fragment {
         movie_id = item.getId();
 
         TV_OVERVIEW.setText(Utility.OVERVIEW);
+        RATING_BAR.setNumStars(5);
 
         getData();
 
@@ -69,13 +73,14 @@ public class OverviewFragment extends Fragment {
             loadData();
         }*/
 
+        /*
         SWIPE_REFRESH.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getData();
                 //Toast.makeText(getContext(), "Refresh", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         return v;
 
@@ -93,6 +98,15 @@ public class OverviewFragment extends Fragment {
                     TV_PRODUCTION_COMPANY.setText( apiResponse.getProductionCompanies().get(0).getName().toString());
                     TV_PRODUCTION_COUNTRY.setText(apiResponse.getProductionCountries().get(0).getName().toString());
                     TV_RELEASE_DATE.setText(apiResponse.getReleaseDate());
+                    float rating = (float) apiResponse.getVoteAverage();
+                    RATING_BAR.setRating(rating / 2);
+                    TV_VOTE_AVERAGE.setText(String.valueOf(apiResponse.getVoteAverage()));
+                    TV_VOTE_COUNT.setText("From " + apiResponse.getVoteCount() + " votes");
+
+                    for (int i = 0; i < apiResponse.getGenres().size(); i++){
+                        Toast.makeText(getActivity(), apiResponse.getGenres().get(i).getName(), Toast.LENGTH_SHORT).show();
+                    }
+
 
                     //Toast.makeText(getContext(), apiResponse.getOverview(), Toast.LENGTH_SHORT).show();
                 }

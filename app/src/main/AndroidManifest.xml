@@ -24,9 +24,12 @@
         <activity android:name=".activity.DiscoverActivity" />
         <activity
             android:name=".activity.DetailMovieActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.PhotoActivity"></activity>
+        <activity
+            android:name=".activity.PhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.FavoritesActivity"></activity>
     </application>
 
 </manifest>

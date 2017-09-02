@@ -56,7 +56,7 @@ public class ResultsItem implements Parcelable{
 	@Override
 	public String toString(){
 		return
-				"ResultsItem{" +
+				"ResultsItemTrailer{" +
 						"overview = '" + overview + '\'' +
 						",original_language = '" + originalLanguage + '\'' +
 						",original_title = '" + originalTitle + '\'' +

@@ -1,9 +1,7 @@
 package com.example.android.movielist.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,7 +18,7 @@ import com.example.android.movielist.R;
 import com.example.android.movielist.adapter.DiscoverMovieAdapter;
 import com.example.android.movielist.model.APIResponse;
 import com.example.android.movielist.model.ResultsItem;
-import com.example.android.movielist.rest.APIClientDiscover;
+import com.example.android.movielist.rest.APIClient;
 import com.example.android.movielist.rest.APIService;
 import com.example.android.movielist.util.Utility;
 
@@ -40,15 +37,17 @@ public class DiscoverActivity extends AppCompatActivity {
     @BindView(R.id.rvDiscover) RecyclerView RV_DISCOVER;
     @BindView(R.id.spYear) Spinner SP_YEAR;
     @BindView(R.id.spSortBy) Spinner SP_SORT_BY;
-    @BindView(R.id.etGenre) EditText ET_GENRE;
+    ///@BindView(R.id.etGenre) EditText ET_GENRE;
 
     private DiscoverMovieAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
     Context context;
 
-    protected ArrayList<Integer> selectGenre;
+
+   /* protected ArrayList<Integer> selectGenre;
     protected CharSequence[] genreList = {"Blackberry Z3", "Blackberry Z10", "Blackberry Z30"};
     boolean[] selectedGenre = new boolean[genreList.length];
+    */
 
     String sortVal;
     String spinner;
@@ -128,6 +127,7 @@ public class DiscoverActivity extends AppCompatActivity {
             }
         });
 
+        /*
         ET_GENRE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,11 +163,11 @@ public class DiscoverActivity extends AppCompatActivity {
                         .show();
 
             }
-        });
+        }); */
     }
 
     private void getData(String year, String sortBy){
-        APIService apiService = APIClientDiscover.getRetrofitClientDiscover().create(APIService.class);
+        APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
         final Call<APIResponse> apiResponseCall = apiService.getMovie(BuildConfig.API_KEY, year, sortBy);
 
         apiResponseCall.enqueue(new Callback<APIResponse>() {

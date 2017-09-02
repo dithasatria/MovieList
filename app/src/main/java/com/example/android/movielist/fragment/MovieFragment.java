@@ -1,5 +1,6 @@
 package com.example.android.movielist.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,6 +36,8 @@ public class MovieFragment extends Fragment {
 
     private DiscoverMovieAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
+    private ProgressDialog progressDialog;
+
 
     public MovieFragment() {
         // Required empty public constructor
@@ -52,6 +55,8 @@ public class MovieFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_movie, container, false);
         ButterKnife.bind(this, v);
 
+        progressDialog = new ProgressDialog(getActivity());
+
         int mNoOfColumns = Utility.calculateNoOfColumns(getContext());
 
         RV_DISCOVER_MOVIE.setLayoutManager(new GridLayoutManager(getActivity(), mNoOfColumns));
@@ -66,6 +71,8 @@ public class MovieFragment extends Fragment {
     }
 
     private void getData(){
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
         APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
         final Call<APIResponse> apiResponseCall = apiService.getTopMovie(BuildConfig.API_KEY);
 
@@ -77,13 +84,15 @@ public class MovieFragment extends Fragment {
                     items = apiResponse.getResults();
                     adapter.setData(items);
                 }
-                Log.d("data", items.toString());
-                Log.d("cek link", apiResponseCall.toString());
+                Log.d("Movie data: ", items.toString());
+                Log.d("Movie cek link: ", apiResponseCall.toString());
+                progressDialog.hide();
             }
 
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Parsing Gagal " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
             }
         });
     }

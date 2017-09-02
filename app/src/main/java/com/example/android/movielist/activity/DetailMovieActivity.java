@@ -1,11 +1,15 @@
 package com.example.android.movielist.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,11 +19,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.movielist.R;
+import com.example.android.movielist.database.DBOpenHelper;
 import com.example.android.movielist.fragment.CastFragment;
 import com.example.android.movielist.fragment.OverviewFragment;
 import com.example.android.movielist.fragment.ReviewFragment;
@@ -34,7 +40,7 @@ import butterknife.ButterKnife;
  * Created by DITHA on 24/08/2017.
  */
 
-public class DetailMovieActivity extends AppCompatActivity {
+public class DetailMovieActivity extends AppCompatActivity implements View.OnClickListener {
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -44,12 +50,13 @@ public class DetailMovieActivity extends AppCompatActivity {
     @BindView(R.id.imgBackdrop) ImageView IMG_BACKDROP;
     @BindView(R.id.imgDiscoverMovie) ImageView IMG_POSTER;
     @BindView(R.id.tvTitle) TextView TV_TITLE;
+    @BindView(R.id.tvGenreDetail) TextView TV_GENRE;
 
-    private static final String KEY_EXTRA_MOVIE = "movie";
-    private static final String KEY_LANGUAGE = "en-US";
     private long movie_id;
 
     private ResultsItem item;
+    private boolean isNewsFavorite = false;
+    private DBOpenHelper dbOpenHelper;
 
     @Override
     protected void onStart() {
@@ -67,6 +74,10 @@ public class DetailMovieActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        TV_TITLE.setSelected(true);
+
+        dbOpenHelper = new DBOpenHelper(getApplicationContext());
+
         item = getIntent().getParcelableExtra("dataMovie");
         if(item == null){
             finish();
@@ -81,9 +92,40 @@ public class DetailMovieActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         NESTED_SCROLL.setFillViewport (true);
+        IMG_BACKDROP.setOnClickListener(this);
 
         collapsingToolbar();
         loadDetailMovie();
+        setupFAB();
+
+        dbOpenHelper = new DBOpenHelper(getApplicationContext());
+        isNewsFavorite = dbOpenHelper.isNewsSavedAsFavorite(String.valueOf(item.getId()));
+        if (isNewsFavorite){
+            // news saved as favorite
+            FAB.setImageResource(R.drawable.ic_favorite_fill);
+        } else {
+            FAB.setImageResource(R.drawable.ic_favorite);
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.imgBackdrop:
+                Intent in = new Intent(DetailMovieActivity.this, PhotoActivity.class);
+                in.putExtra("dataPhoto", item.getBackdropPath());
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(this, IMG_BACKDROP, getString(R.string.activity_image_trans));
+                    startActivity(in, options.toBundle());
+                }
+                else{
+                    startActivity(in);
+                }
+                break;
+        }
     }
 
     private class sliderAdapter extends FragmentPagerAdapter {
@@ -128,6 +170,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(Utility.URL_IMAGE + item.getPosterPath()).into(IMG_POSTER);
 
         TV_TITLE.setText(item.getTitle());
+        TV_GENRE.setText("");
         Utility.OVERVIEW = item.getOverview();
     }
 
@@ -156,14 +199,52 @@ public class DetailMovieActivity extends AppCompatActivity {
         });
     }
 
+    private void setupFAB(){
+        NESTED_SCROLL.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(oldScrollY > scrollY){
+                    FAB.show();
+                }
+                else {
+                    FAB.hide();
+                }
+            }
+        });
+
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNewsFavorite){
+                    boolean isDeleteSuccess = dbOpenHelper.deleteNewsItem(String.valueOf(item.getId()));
+                    isNewsFavorite = !isDeleteSuccess;
+                }
+                else {
+                    isNewsFavorite = dbOpenHelper.saveNewsItem(item) > 0;
+                    String snackBarText = isNewsFavorite ? "Movie saved as favorite" : "Failed to favorite movie";
+                    Snackbar.make(FAB, snackBarText, Snackbar.LENGTH_SHORT)
+                            .show();
+
+                }
+                FAB.setImageResource(isNewsFavorite ? R.drawable.ic_favorite_fill : R.drawable.ic_favorite);
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) // Press Back Icon
-        {
-            finish();
+        switch (item.getItemId()){
+            case R.id.action_search:
+                startActivity(new Intent(DetailMovieActivity.this, SearchActivity.class));
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
+
 
 }

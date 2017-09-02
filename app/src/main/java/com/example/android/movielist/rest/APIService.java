@@ -17,55 +17,65 @@ import retrofit2.http.Query;
 
 public interface APIService {
 
-    @GET("popular")
+    @GET("movie/popular")
     Call<APIResponse> getTopMovie(
             @Query("api_key") String apiKey
     );
 
-    @GET("now_playing")
+    @GET("movie/now_playing")
     Call<APIResponse> getNowPlaying(
             @Query("api_key") String apiKey
     );
 
-    @GET("top_rated")
+    @GET("movie/top_rated")
     Call<APIResponse> getTopRated(
             @Query("api_key") String apiKey
     );
 
-    @GET("upcoming")
+    @GET("movie/upcoming")
     Call<APIResponse> getUpcoming(
             @Query("api_key") String apiKey
     );
 
-    @GET("movie")
+    @GET("discover/movie")
     Call<APIResponse> getMovie(
             @Query("api_key") String apiKey,
             @Query("year") String year,
             @Query("sort_by") String sortBy
     );
 
-    @GET("{movie_id}")
+    @GET("movie/{movie_id}")
     Call<APIResponseDetailMovie> getMovieId(
             @Path("movie_id") long id,
             @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
-    @GET("videos")
+    @GET("movie/{movie_id}/videos")
     Call<APIResponseTrailerMovie> getTrailerMovie(
+            @Path("movie_id") long id,
             @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
-    @GET("reviews")
+    @GET("movie/{movie_id}/reviews")
     Call<APIResponseReview> getReviewMovie(
+            @Path("movie_id") long id,
             @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
-    @GET("credits")
+    @GET("movie/{movie_id}/credits")
     Call<APIResponseCast> getCast(
+            @Path("movie_id") long id,
             @Query("api_key") String api_key,
             @Query("language") String language
+    );
+
+    @GET("search/movie")
+    Call<APIResponse> getDataMovie(
+            @Query("api_key") String api_key,
+            @Query("language") String language,
+            @Query("query") String query
     );
 }

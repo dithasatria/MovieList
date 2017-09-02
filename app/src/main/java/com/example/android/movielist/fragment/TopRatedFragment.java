@@ -77,8 +77,8 @@ public class TopRatedFragment extends Fragment {
                     items = apiResponse.getResults();
                     adapter.setData(items);
                 }
-                Log.d("data", items.toString());
-                Log.d("cek link", apiResponseCall.toString());
+                Log.d("Top Rated data: ", items.toString());
+                Log.d("Top Rated cek link: ", apiResponseCall.toString());
             }
 
             @Override

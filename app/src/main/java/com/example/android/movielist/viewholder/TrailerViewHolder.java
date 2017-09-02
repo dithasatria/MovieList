@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.movielist.R;
+import com.example.android.movielist.model.trailer.ResultsItemTrailer;
 import com.example.android.movielist.util.Utility;
 
 import butterknife.BindView;
@@ -30,7 +31,7 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(final com.example.android.movielist.model.trailer.ResultsItem item){
+    public void bind(final ResultsItemTrailer item){
         TV_TRAILER_NUM.setText(item.getName());
         Glide.with(itemView.getContext()).load(Utility.URL_IMAGE_YOUTUBE + item.getKey() + Utility.IMAGE_QUALITY).into(IMG_TRAILER);
 

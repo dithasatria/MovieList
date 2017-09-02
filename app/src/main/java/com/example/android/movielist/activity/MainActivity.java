@@ -14,7 +14,6 @@ import android.view.MenuItem;
 
 import com.example.android.movielist.R;
 import com.example.android.movielist.fragment.DataFragment;
-import com.example.android.movielist.fragment.MovieFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()){
             case R.id.action_search:
-                startActivity(new Intent(MainActivity.this, DiscoverActivity.class));
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -88,9 +87,7 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             startActivity(new Intent(MainActivity.this, DiscoverActivity.class));
         } else if (id == R.id.nav_search) {
-            MovieFragment fragment = new MovieFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } else if (id == R.id.nav_rated) {
             startActivity(new Intent(this, DiscoverActivity.class));
         } else if (id == R.id.nav_settings) {

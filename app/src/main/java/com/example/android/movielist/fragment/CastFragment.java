@@ -17,7 +17,7 @@ import com.example.android.movielist.adapter.CastAdapter;
 import com.example.android.movielist.model.ResultsItem;
 import com.example.android.movielist.model.cast.APIResponseCast;
 import com.example.android.movielist.model.cast.CastItem;
-import com.example.android.movielist.rest.APIClientReviewMovie;
+import com.example.android.movielist.rest.APIClient;
 import com.example.android.movielist.rest.APIService;
 import com.example.android.movielist.util.Utility;
 
@@ -54,7 +54,7 @@ public class CastFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_cast, container, false);
         ButterKnife.bind(this, v);
 
-        item = getActivity().getIntent().getParcelableExtra("dataMovie");
+        item = getActivity().getIntent().getParcelableExtra(Utility.KEY_INTENT);
         movie_id = item.getId();
 
         int mNoOfColumns = Utility.calculateNoOfColumns(getContext());
@@ -71,8 +71,8 @@ public class CastFragment extends Fragment {
     }
 
     private void getData(){
-        APIService apiService = APIClientReviewMovie.getRetrofitClientReview(movie_id).create(APIService.class);
-        final Call<APIResponseCast> apiResponseCastCall = apiService.getCast(BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
+        APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
+        final Call<APIResponseCast> apiResponseCastCall = apiService.getCast(movie_id, BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
 
         apiResponseCastCall.enqueue(new Callback<APIResponseCast>() {
             @Override

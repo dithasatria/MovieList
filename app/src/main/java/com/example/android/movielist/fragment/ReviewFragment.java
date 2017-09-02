@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.movielist.BuildConfig;
@@ -16,7 +17,7 @@ import com.example.android.movielist.R;
 import com.example.android.movielist.adapter.TampilReviewAdapter;
 import com.example.android.movielist.model.review.APIResponseReview;
 import com.example.android.movielist.model.review.ResultsItem;
-import com.example.android.movielist.rest.APIClientReviewMovie;
+import com.example.android.movielist.rest.APIClient;
 import com.example.android.movielist.rest.APIService;
 import com.example.android.movielist.util.Utility;
 
@@ -35,6 +36,7 @@ import retrofit2.Response;
 public class ReviewFragment extends Fragment {
 
     @BindView(R.id.rvTampilReview) RecyclerView RV_TAMPIL_REVIEW;
+    @BindView(R.id.tvNoResult) TextView TV_NO_RESULT;
 
     private TampilReviewAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
@@ -55,7 +57,7 @@ public class ReviewFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_review, container, false);
         ButterKnife.bind(this, v);
 
-        item = getActivity().getIntent().getParcelableExtra("dataMovie");
+        item = getActivity().getIntent().getParcelableExtra(Utility.KEY_INTENT);
         movie_id = item.getId();
 
         RV_TAMPIL_REVIEW.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -70,16 +72,22 @@ public class ReviewFragment extends Fragment {
     }
 
     private void getData(){
-        APIService apiService = APIClientReviewMovie.getRetrofitClientReview(movie_id).create(APIService.class);
-        final Call<APIResponseReview> apiResponseCall = apiService.getReviewMovie(BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
+        APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
+        final Call<APIResponseReview> apiResponseCall = apiService.getReviewMovie(movie_id, BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
 
         apiResponseCall.enqueue(new Callback<APIResponseReview>() {
             @Override
             public void onResponse(Call<APIResponseReview> call, Response<APIResponseReview> response) {
                 APIResponseReview apiResponseTrailerMovie = response.body();
-                if(apiResponseTrailerMovie != null){
+                if(apiResponseTrailerMovie != null) {
                     items = apiResponseTrailerMovie.getResults();
                     adapter.setData(items);
+                    if(apiResponseTrailerMovie.getTotalResults() != 0){
+                        TV_NO_RESULT.setVisibility(View.INVISIBLE);
+                    }
+                    else{
+                        TV_NO_RESULT.setVisibility(View.VISIBLE);
+                    }
                 }
                 Log.d("review data", items.toString());
                 Log.d("review cek link", apiResponseCall.toString());

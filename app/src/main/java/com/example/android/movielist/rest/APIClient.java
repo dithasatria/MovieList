@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class APIClient {
-    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static Retrofit mRetrofit;
 
     public static Retrofit getRetrofitClient(){

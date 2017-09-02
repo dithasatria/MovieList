@@ -1,12 +1,13 @@
 package com.example.android.movielist.adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.movielist.R;
-import com.example.android.movielist.model.trailer.ResultsItem;
+import com.example.android.movielist.model.trailer.ResultsItemTrailer;
 import com.example.android.movielist.viewholder.TrailerViewHolder;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
 
-    private List<ResultsItem> resultsItems;
+    private List<ResultsItemTrailer> resultsItemTrailers;
+    private Activity activity;
 
-    public TrailerAdapter(List<ResultsItem> resultsItems) {
-        this.resultsItems = resultsItems;
+    public TrailerAdapter(List<ResultsItemTrailer> resultsItemTrailers, Activity activity) {
+        this.resultsItemTrailers = resultsItemTrailers;
+        this.activity = activity;
     }
 
     @Override
@@ -32,22 +35,22 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
 
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
-        ResultsItem item = resultsItems.get(position);
+        ResultsItemTrailer item = resultsItemTrailers.get(position);
         holder.bind(item);
     }
 
     @Override
     public int getItemCount() {
-        return resultsItems.size();
+        return resultsItemTrailers.size();
     }
 
-    public void setData(List<ResultsItem> datas){
-        if(resultsItems != null){
-            this.resultsItems.clear();
-            resultsItems.addAll(datas);
+    public void setData(List<ResultsItemTrailer> datas){
+        if(resultsItemTrailers != null){
+            this.resultsItemTrailers.clear();
+            resultsItemTrailers.addAll(datas);
         }
         else{
-            resultsItems = datas;
+            resultsItemTrailers = datas;
         }
         notifyDataSetChanged();
     }

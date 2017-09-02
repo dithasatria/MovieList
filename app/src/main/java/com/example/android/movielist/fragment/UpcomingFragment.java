@@ -77,8 +77,8 @@ public class UpcomingFragment extends Fragment {
                     items = apiResponse.getResults();
                     adapter.setData(items);
                 }
-                Log.d("data", items.toString());
-                Log.d("cek link", apiResponseCall.toString());
+                Log.d("Upcoming data: ", items.toString());
+                Log.d("Upcoming cek link: ", apiResponseCall.toString());
             }
 
             @Override

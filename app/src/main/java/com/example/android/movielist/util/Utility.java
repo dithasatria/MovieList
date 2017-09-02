@@ -15,9 +15,11 @@ public class Utility {
     public static String KEY_LANGUAGE = "en-US";
     public static long idMovie;
     public static String OVERVIEW;
+    public static String KEY_INTENT = "dataMovie";
     public static String PRODUCTION_COMPANY;
     public static String PRODUCTION_COUNTRY;
     public static String RELEASE_DATE;
+    public static String genre;
 
     public static int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

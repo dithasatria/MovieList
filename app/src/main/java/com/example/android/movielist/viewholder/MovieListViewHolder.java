@@ -55,6 +55,70 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
                     itemView.getContext().startActivity(in);
                 }
 
+                for (int i = 0; i < item.getGenreIds().size(); i++) {
+                    switch (item.getGenreIds().get(i)) {
+                        case 12:
+                            Utility.genre += " Adventure,";
+                            break;
+                        case 14:
+                            Utility.genre += " Fantasy,";
+                        case 16:
+                            Utility.genre += " Animation,";
+                            break;
+                        case 18:
+                            Utility.genre += " Drama,";
+                            break;
+                        case 27:
+                            Utility.genre += " Horror,";
+                            break;
+                        case 28:
+                            Utility.genre += " Action,";
+                            break;
+                        case 36:
+                            Utility.genre += " History,";
+                            break;
+                        case 35:
+                            Utility.genre += " Comedy,";
+                            break;
+                        case 37:
+                            Utility.genre += " Western,";
+                            break;
+                        case 53:
+                            Utility.genre += " Thriller,";
+                            break;
+                        case 80:
+                            Utility.genre += " Crime,";
+                            break;
+                        case 99:
+                            Utility.genre += " Documentary,";
+                            break;
+                        case 878:
+                            Utility.genre += " Science Fiction,";
+                            break;
+                        case 9648:
+                            Utility.genre += " Mystery,";
+                            break;
+                        case 10402:
+                            Utility.genre += " Music,";
+                            break;
+                        case 10749:
+                            Utility.genre += " Romance,";
+                            break;
+                        case 10751:
+                            Utility.genre += " Family,";
+                            break;
+                        case 10752:
+                            Utility.genre += " War,";
+                            break;
+                        case 10770:
+                            Utility.genre += " TV Movie,";
+                            break;
+                        default:
+                            Utility.genre += ",";
+                            break;
+                    }
+                }
+
             }
         });
     }

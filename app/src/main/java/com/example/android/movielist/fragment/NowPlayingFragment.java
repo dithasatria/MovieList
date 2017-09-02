@@ -79,8 +79,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                     items = apiResponse.getResults();
                     adapter.setData(items);
                 }
-                Log.d("data", items.toString());
-                Log.d("cek link", apiResponseCall.toString());
+                Log.d("Now Playing data: ", items.toString());
+                Log.d("Now Playing cek link: ", apiResponseCall.toString());
             }
 
             @Override

@@ -49,26 +49,6 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/spinnerSortBy" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Genre" />
-
-            <EditText
-                android:id="@+id/etGenre"
-                android:hint="Genre"
-                android:focusable="false"
-                android:textSize="12sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
