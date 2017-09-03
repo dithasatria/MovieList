@@ -24,8 +24,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.media.MediaFormat.KEY_LANGUAGE;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -43,6 +41,9 @@ public class OverviewFragment extends Fragment {
     @BindView(R.id.tvVoteAverage) TextView TV_VOTE_AVERAGE;
     @BindView(R.id.tvVoteCount) TextView TV_VOTE_COUNT;
     //@BindView(R.id.swipeRefreshFragmentOverview) SwipeRefreshLayout SWIPE_REFRESH;
+
+    private String mCompany = "";
+    private String mCountry = "";
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -88,15 +89,22 @@ public class OverviewFragment extends Fragment {
 
     private void getData(){
         APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
-        final Call<APIResponseDetailMovie> apiResponseCall = apiService.getMovieId(movie_id, BuildConfig.API_KEY, KEY_LANGUAGE);
+        final Call<APIResponseDetailMovie> apiResponseCall = apiService.getMovieId(movie_id, BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
 
         apiResponseCall.enqueue(new Callback<APIResponseDetailMovie>() {
             @Override
             public void onResponse(Call<APIResponseDetailMovie> call, Response<APIResponseDetailMovie> response) {
                 APIResponseDetailMovie apiResponse = response.body();
                 if(apiResponse != null){
-                    TV_PRODUCTION_COMPANY.setText( apiResponse.getProductionCompanies().get(0).getName().toString());
-                    TV_PRODUCTION_COUNTRY.setText(apiResponse.getProductionCountries().get(0).getName().toString());
+                    for (int i = 0; i < apiResponse.getProductionCompanies().size(); i++) {
+                        mCompany += apiResponse.getProductionCompanies().get(i).getName().toString() + ", ";
+                        TV_PRODUCTION_COMPANY.setText(mCompany);
+                    }
+                    for (int i = 0; i < apiResponse.getProductionCountries().size(); i++) {
+                        mCountry += apiResponse.getProductionCountries().get(i).getName().toString() + ", ";
+                        TV_PRODUCTION_COUNTRY.setText(mCountry);
+                    }
+                    
                     TV_RELEASE_DATE.setText(apiResponse.getReleaseDate());
                     float rating = (float) apiResponse.getVoteAverage();
                     RATING_BAR.setRating(rating / 2);
@@ -104,7 +112,7 @@ public class OverviewFragment extends Fragment {
                     TV_VOTE_COUNT.setText("From " + apiResponse.getVoteCount() + " votes");
 
                     for (int i = 0; i < apiResponse.getGenres().size(); i++){
-                        Toast.makeText(getActivity(), apiResponse.getGenres().get(i).getName(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), apiResponse.getGenres().get(i).getName(), Toast.LENGTH_SHORT).show();
                     }
 
 

@@ -3,6 +3,7 @@ package com.example.android.movielist.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,8 @@ public class TopRatedFragment extends Fragment {
 
     @BindView(R.id.rvTopRated)
     RecyclerView RV_DISCOVER_MOVIE;
+    @BindView(R.id.swiperefresh)
+    SwipeRefreshLayout SWIPE_REFRESH;
 
     private DiscoverMovieAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
@@ -62,6 +65,13 @@ public class TopRatedFragment extends Fragment {
         RV_DISCOVER_MOVIE.setAdapter(adapter);
         getData();
 
+        SWIPE_REFRESH.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData();
+            }
+        });
+
         return v;
     }
 
@@ -79,11 +89,13 @@ public class TopRatedFragment extends Fragment {
                 }
                 Log.d("Top Rated data: ", items.toString());
                 Log.d("Top Rated cek link: ", apiResponseCall.toString());
+                SWIPE_REFRESH.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Parsing Gagal " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                SWIPE_REFRESH.setRefreshing(false);
             }
         });
     }

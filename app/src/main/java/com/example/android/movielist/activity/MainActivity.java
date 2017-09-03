@@ -89,15 +89,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_search) {
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } else if (id == R.id.nav_rated) {
-            startActivity(new Intent(this, DiscoverActivity.class));
+            startActivity(new Intent(this, FavoritesActivity.class));
         } else if (id == R.id.nav_settings) {
             //startActivity(new Intent(this, DetailMovieActivity.class));
         } else if (id == R.id.nav_about) {
-
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 }

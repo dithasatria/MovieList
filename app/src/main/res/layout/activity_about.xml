@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="com.example.android.movielist.activity.AboutActivity">
+
+    <TextView
+        android:padding="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MOVIE LIST"
+        android:gravity="center"
+        android:textColor="@color/colorIcons"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:text="By:"
+        android:gravity="center"
+        android:textColor="@color/colorIcons"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:padding="10sp"
+        android:text="I GUSTI PUTU DITHA SATRIA DANA"
+        android:gravity="center"
+        android:textColor="@color/colorIcons"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:padding="10sp"
+        android:text="In collaborate with :"
+        android:gravity="center"
+        android:textColor="@color/colorIcons"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:src="@drawable/iak_logo"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:src="@drawable/ic_email_black_24dp"
+        android:layout_width="24dp"
+        android:layout_marginLeft="80dp"
+        android:layout_height="24dp" />
+
+        <TextView
+            android:padding="5sp"
+            android:textColor="@color/colorIcons"
+            android:text="dithasatria1@gmail.com"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

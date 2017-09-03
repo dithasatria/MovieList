@@ -1,6 +1,9 @@
 package com.example.android.movielist.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,24 +20,38 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.example.android.movielist.BuildConfig;
 import com.example.android.movielist.R;
 import com.example.android.movielist.database.DBOpenHelper;
 import com.example.android.movielist.fragment.CastFragment;
 import com.example.android.movielist.fragment.OverviewFragment;
 import com.example.android.movielist.fragment.ReviewFragment;
 import com.example.android.movielist.fragment.TrailerFragment;
+import com.example.android.movielist.model.APIResponseDetailMovie;
 import com.example.android.movielist.model.ResultsItem;
+import com.example.android.movielist.rest.APIClient;
+import com.example.android.movielist.rest.APIService;
 import com.example.android.movielist.util.Utility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.bumptech.glide.Glide.with;
 
 /**
  * Created by DITHA on 24/08/2017.
@@ -47,6 +64,8 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
     @BindView(R.id.toolbar) Toolbar TOOLBAR;
     @BindView(R.id.fab) FloatingActionButton FAB;
     @BindView(R.id.nestedScrollView) NestedScrollView NESTED_SCROLL;
+    @BindView(R.id.layoutTabJudul) RelativeLayout LAYOUT_TAB_JUDUL;
+    @BindView(R.id.tabLayout) TabLayout TAB_LAYOUT;
     @BindView(R.id.imgBackdrop) ImageView IMG_BACKDROP;
     @BindView(R.id.imgDiscoverMovie) ImageView IMG_POSTER;
     @BindView(R.id.tvTitle) TextView TV_TITLE;
@@ -57,6 +76,8 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
     private ResultsItem item;
     private boolean isNewsFavorite = false;
     private DBOpenHelper dbOpenHelper;
+    String genre = "";
+    private int collapsingToolbarColor;
 
     @Override
     protected void onStart() {
@@ -82,6 +103,9 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
         if(item == null){
             finish();
         }
+        if (genre.endsWith(",")) {
+            genre = genre.substring(0, genre.length() - 1);
+        }
         movie_id = item.getId();
 
         //Toast.makeText(this, String.valueOf(movie_id), Toast.LENGTH_SHORT).show();
@@ -97,6 +121,8 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
         collapsingToolbar();
         loadDetailMovie();
         setupFAB();
+        getData();
+        setupBackgroundPalette();
 
         dbOpenHelper = new DBOpenHelper(getApplicationContext());
         isNewsFavorite = dbOpenHelper.isNewsSavedAsFavorite(String.valueOf(item.getId()));
@@ -166,11 +192,11 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void loadDetailMovie(){
-        Glide.with(getApplicationContext()).load(Utility.URL_IMAGE + item.getBackdropPath()).into(IMG_BACKDROP);
-        Glide.with(getApplicationContext()).load(Utility.URL_IMAGE + item.getPosterPath()).into(IMG_POSTER);
+        with(getApplicationContext()).load(Utility.URL_IMAGE + item.getBackdropPath()).into(IMG_BACKDROP);
+        with(getApplicationContext()).load(Utility.URL_IMAGE + item.getPosterPath()).into(IMG_POSTER);
 
         TV_TITLE.setText(item.getTitle());
-        TV_GENRE.setText("");
+        //TV_GENRE.setText("");
         Utility.OVERVIEW = item.getOverview();
     }
 
@@ -190,9 +216,11 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(item.getTitle());
+                    TOOLBAR.setBackgroundColor(collapsingToolbarColor);
                     isShow = true;
                 } else if(isShow) {
                     collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                    TOOLBAR.setBackgroundColor(Color.TRANSPARENT);
                     isShow = false;
                 }
             }
@@ -231,6 +259,32 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    private void setupBackgroundPalette(){
+        if(item.getPosterPath() != null) {
+            Glide.with(this)
+                    .asBitmap()
+                    .load(Utility.URL_IMAGE + item.getPosterPath())
+                    .into(new BitmapImageViewTarget(IMG_POSTER) {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> anim) {
+                            super.onResourceReady(bitmap, anim);
+                            Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(Palette palette) {
+                                    // Here's your generated palette
+                                    Palette.Swatch vibrantSwatch = palette.getDarkVibrantSwatch();
+                                    if (vibrantSwatch != null) {
+                                        collapsingToolbarColor = vibrantSwatch.getRgb();
+                                        LAYOUT_TAB_JUDUL.setBackgroundColor(vibrantSwatch.getRgb());
+                                        TAB_LAYOUT.setBackgroundColor(vibrantSwatch.getRgb());
+                                        FAB.setBackgroundTintList(ColorStateList.valueOf(vibrantSwatch.getRgb()));
+                                    }
+                                }
+                            });
+                        }
+                    });
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -246,5 +300,31 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
+    private void getData(){
+        APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
+        final Call<APIResponseDetailMovie> apiResponseCall = apiService.getMovieId(movie_id, BuildConfig.API_KEY, Utility.KEY_LANGUAGE);
+
+        apiResponseCall.enqueue(new Callback<APIResponseDetailMovie>() {
+            @Override
+            public void onResponse(Call<APIResponseDetailMovie> call, Response<APIResponseDetailMovie> response) {
+                APIResponseDetailMovie apiResponse = response.body();
+                if(apiResponse != null){
+
+                    for (int i = 0; i < apiResponse.getGenres().size(); i++){
+                        genre += apiResponse.getGenres().get(i).getName() + ", ";
+                        TV_GENRE.setText(genre);
+                    }
+
+
+                    //Toast.makeText(getContext(), apiResponse.getOverview(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResponseDetailMovie> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Parsing Gagal " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

@@ -4,6 +4,7 @@ package com.example.android.movielist.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,6 +38,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     @BindView(R.id.rvNowPlaying)
     RecyclerView RV_DISCOVER_MOVIE;
+    @BindView(R.id.swiperefresh)
+    SwipeRefreshLayout SWIPE_REFRESH;
 
     private DiscoverMovieAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
@@ -64,6 +67,13 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         RV_DISCOVER_MOVIE.setAdapter(adapter);
         getData();
 
+        SWIPE_REFRESH.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData();
+            }
+        });
+
         return v;
     }
 
@@ -71,6 +81,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
         final Call<APIResponse> apiResponseCall = apiService.getNowPlaying(BuildConfig.API_KEY);
 
+        SWIPE_REFRESH.setRefreshing(true);
         apiResponseCall.enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
@@ -81,10 +92,12 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 Log.d("Now Playing data: ", items.toString());
                 Log.d("Now Playing cek link: ", apiResponseCall.toString());
+                SWIPE_REFRESH.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
+                SWIPE_REFRESH.setRefreshing(false);
                 Toast.makeText(getActivity(), "Parsing Gagal " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

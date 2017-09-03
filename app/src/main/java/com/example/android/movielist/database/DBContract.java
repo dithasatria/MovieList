@@ -12,8 +12,11 @@ public class DBContract {
 
         public static final String _ID = "id";
         public static final String ID_MOVIE = "id_movie";
+        public static final String POSTER_PATH = "poster_path";
+        public static final String BACKDROP_PATH = "backdrop_path";
         public static final String TITLE = "title";
         public static final String RATING = "rating";
+        public static final String OVERVIEW = "overview";
 
     }
 }

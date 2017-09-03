@@ -55,7 +55,7 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
                     itemView.getContext().startActivity(in);
                 }
 
-                for (int i = 0; i < item.getGenreIds().size(); i++) {
+                    /*
                     switch (item.getGenreIds().get(i)) {
                         case 12:
                             Utility.genre += " Adventure,";
@@ -117,7 +117,7 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
                             Utility.genre += ",";
                             break;
                     }
-                }
+                } */
 
             }
         });

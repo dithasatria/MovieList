@@ -24,8 +24,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + DBContract.MovieContract.TABLE_NAME + " (" +
                     DBContract.MovieContract._ID + " INTEGER PRIMARY KEY, " +
                     DBContract.MovieContract.ID_MOVIE + " TEXT," +
+                    DBContract.MovieContract.POSTER_PATH + " TEXT," +
+                    DBContract.MovieContract.BACKDROP_PATH + " TEXT," +
                     DBContract.MovieContract.TITLE + " TEXT," +
-                    DBContract.MovieContract.RATING + " TEXT" +
+                    DBContract.MovieContract.RATING + " TEXT," +
+                    DBContract.MovieContract.OVERVIEW + " TEXT" +
                     "); ";
 
     private static final String SQL_DROP_TABLE_NEWS  =
@@ -51,8 +54,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(DBContract.MovieContract.ID_MOVIE, articlesItem.getId());
+        cv.put(DBContract.MovieContract.POSTER_PATH, articlesItem.getPosterPath());
+        cv.put(DBContract.MovieContract.BACKDROP_PATH, articlesItem.getBackdropPath());
         cv.put(DBContract.MovieContract.TITLE, articlesItem.getTitle());
         cv.put(DBContract.MovieContract.RATING, articlesItem.getVoteAverage());
+        cv.put(DBContract.MovieContract.OVERVIEW, articlesItem.getOverview());
 
         long rowId = db.insert(DBContract.MovieContract.TABLE_NAME, null, cv);
         db.close();
@@ -111,15 +117,21 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             do {
                 String id_movie = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.ID_MOVIE));
+                String poster_path = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.POSTER_PATH));
+                String backdrop_path = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.BACKDROP_PATH));
                 String title = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.TITLE));
                 String rating = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.RATING));
+                String overview = cursor.getString(cursor.getColumnIndex(DBContract.MovieContract.OVERVIEW));
 
                 Double ratingDouble = Double.parseDouble(rating);
 
                 ResultsItem item = new ResultsItem();
                 item.setId(Integer.parseInt(id_movie));
+                item.setPosterPath(poster_path);
+                item.setBackdropPath(backdrop_path);
                 item.setTitle(title);
                 item.setVoteAverage(ratingDouble);
+                item.setOverview(overview);
 
                 articlesItems.add(item);
                 Log.d("getFavoriteNews: news ", item.getTitle());

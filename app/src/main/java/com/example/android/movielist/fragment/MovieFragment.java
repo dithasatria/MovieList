@@ -3,6 +3,7 @@ package com.example.android.movielist.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +34,7 @@ import retrofit2.Response;
 public class MovieFragment extends Fragment {
 
     @BindView(R.id.rvDiscoverMovie) RecyclerView RV_DISCOVER_MOVIE;
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout SWIPE_REFRESH;
 
     private DiscoverMovieAdapter adapter;
     private List<ResultsItem> items = new ArrayList<>();
@@ -67,12 +69,19 @@ public class MovieFragment extends Fragment {
 
         getData();
 
+        SWIPE_REFRESH.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData();
+            }
+        });
+
         return v;
     }
 
     private void getData(){
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
+        //progressDialog.setMessage("Loading....");
+        //progressDialog.show();
         APIService apiService = APIClient.getRetrofitClient().create(APIService.class);
         final Call<APIResponse> apiResponseCall = apiService.getTopMovie(BuildConfig.API_KEY);
 
@@ -87,12 +96,14 @@ public class MovieFragment extends Fragment {
                 Log.d("Movie data: ", items.toString());
                 Log.d("Movie cek link: ", apiResponseCall.toString());
                 progressDialog.hide();
+                SWIPE_REFRESH.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Parsing Gagal " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.hide();
+                SWIPE_REFRESH.setRefreshing(false);
             }
         });
     }
